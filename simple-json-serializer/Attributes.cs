@@ -1,4 +1,4 @@
-﻿namespace simple_json_serializer;
+﻿namespace SimpleJsonSerializer;
 
 [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
 public class JsonFieldAttribute : Attribute

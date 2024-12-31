@@ -1,6 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using simple_json_serializer;
+using SimpleJsonSerializer;
 
 var stuff = new Stuff
 {

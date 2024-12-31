@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Text;
 
-namespace simple_json_serializer;
+namespace SimpleJsonSerializer;
 
 public record JsonSerializerSettings(bool UseCamelCase = false, bool IgnoreNullValues = false, bool Indented = false);
 
