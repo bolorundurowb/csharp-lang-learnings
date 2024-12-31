@@ -51,8 +51,8 @@ public class JsonSerializer
             return iterableStringBuilder.ToString();
         }
 
-        var instanceProperties = instanceType.GetProperties(BindingFlags.Public);
-        var instanceFields = instanceType.GetFields(BindingFlags.Public);
+        var instanceProperties = instanceType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+        var instanceFields = instanceType.GetFields(BindingFlags.Public | BindingFlags.Instance);
 
         var objectStringBuilder = new StringBuilder();
         objectStringBuilder.Append("{");
