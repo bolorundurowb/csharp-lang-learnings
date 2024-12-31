@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "simple-json-serializer", "simple-json-serializer.csproj", "{2AE274BB-179D-4794-8077-CC0D7D0F3E2E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2AE274BB-179D-4794-8077-CC0D7D0F3E2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AE274BB-179D-4794-8077-CC0D7D0F3E2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AE274BB-179D-4794-8077-CC0D7D0F3E2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AE274BB-179D-4794-8077-CC0D7D0F3E2E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
