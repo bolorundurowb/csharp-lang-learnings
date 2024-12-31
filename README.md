@@ -1,2 +1,2 @@
-# chsarp-lang-learnings
+# csharp-lang-learnings
 Projects built to explore more complex C# language features
