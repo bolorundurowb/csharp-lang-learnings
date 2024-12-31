@@ -14,13 +14,13 @@ var stuff = new Stuff
     }
 };
 
-Console.WriteLine(JsonSerializer.Serialize(stuff, new JsonSerializerSettings(UseCamelCase: true)));
+Console.WriteLine(JsonSerializer.Serialize(stuff, new JsonSerializerSettings(UseCamelCase: true, IgnoreNullValues: true)));
 
 class Stuff
 {
     public int? MyInt { get; set; }
 
-    public string MyString { get; set; }
+    public string? MyString { get; set; }
 
-    public Stuff MyStuff { get; set; }
+    public Stuff? MyStuff { get; set; }
 }
