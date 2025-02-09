@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "source-generator-json-serializer", "source-generator-json-serializer.csproj", "{33280827-40E6-4E87-83F5-A5DB7635167A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "json-source-generator", "json-source-generator\json-source-generator.csproj", "{D0C49168-FD0D-4021-A5D9-1722520F402F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{33280827-40E6-4E87-83F5-A5DB7635167A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33280827-40E6-4E87-83F5-A5DB7635167A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33280827-40E6-4E87-83F5-A5DB7635167A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0C49168-FD0D-4021-A5D9-1722520F402F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0C49168-FD0D-4021-A5D9-1722520F402F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0C49168-FD0D-4021-A5D9-1722520F402F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0C49168-FD0D-4021-A5D9-1722520F402F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
