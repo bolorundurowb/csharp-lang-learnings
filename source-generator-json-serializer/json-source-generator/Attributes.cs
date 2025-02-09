@@ -2,13 +2,13 @@ using System;
 
 namespace json_source_generator
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    [AttributeUsage(AttributeTargets.Class)]
     public class JsonSerializableAttribute : Attribute
     {
     }
 
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    public class JsonIgnoreAttribute : Attribute
+    public class JsonIgnoreFieldAttribute : Attribute
     {
     }
 }
