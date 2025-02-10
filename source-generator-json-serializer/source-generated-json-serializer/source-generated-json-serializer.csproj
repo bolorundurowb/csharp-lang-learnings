@@ -5,6 +5,11 @@
         <RootNamespace>source_generated_json_serializer</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <OutputType>Exe</OutputType>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\json-source-generator\json-source-generator.csproj" />
+    </ItemGroup>
 
 </Project>
