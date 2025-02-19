@@ -1,10 +1,29 @@
-using source_generated_json_serializer;
+using System.Text.Json.Serialization;
 
-var data = new MyDataClass
+namespace SourceGeneratedJsonSerializer;
+
+[JsonSerializable]
+public partial class Stuff
 {
-    MyInt = 12,
-    MyFloat = 34.56f,
-    MyString = "Should be ignored"
-};
+    public int? MyInt { get; set; }
 
-Console.WriteLine(data.ToJson());
+    [JsonIgnoreField]
+    public string? MyString { get; set; }
+
+    public Stuff? MyStuff { get; set; }
+}
+
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var data = new Stuff
+        {
+            MyInt = 12,
+            MyStuff = null,
+            MyString = "Should be ignored"
+        };
+
+        Console.WriteLine(data.ToJson());
+    }
+}

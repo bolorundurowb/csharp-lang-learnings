@@ -1,95 +1,83 @@
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Text;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 
-namespace json_source_generator;
+namespace JsonSourceGenerator;
 
 [Generator]
-public class JsonSerializableGenerator : ISourceGenerator
+public class JsonObjectSourceGenerator : IIncrementalGenerator
 {
-    public void Initialize(GeneratorInitializationContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        // Register a syntax receiver to collect candidate types
-        context.RegisterForSyntaxNotifications(() => new JsonSerializableSyntaxReceiver());
+        var classDeclarations = context.SyntaxProvider
+            .CreateSyntaxProvider(
+                (node, _) => node is ClassDeclarationSyntax cds &&
+                             cds.AttributeLists.Any(al => al.Attributes.Any(a => a.Name.ToString() == "JsonSerializableAttribute")),
+                (ctx, _) => (ClassDeclarationSyntax)ctx.Node)
+            .Where(cds => cds != null);
+
+        var compilationAndClasses = context.CompilationProvider.Combine(classDeclarations.Collect());
+
+        context.RegisterSourceOutput(compilationAndClasses, (spc, source) => Execute(source.Left, source.Right, spc));
     }
 
-    public void Execute(GeneratorExecutionContext context)
+    private void Execute(Compilation compilation, ImmutableArray<ClassDeclarationSyntax> classDeclarations, SourceProductionContext context)
     {
-        if (context.SyntaxReceiver is not JsonSerializableSyntaxReceiver receiver)
-            return;
-
-        // Get the compilation
-        var compilation = context.Compilation;
-
-        // Get the attribute symbols
-        var jsonSerializableAttributeSymbol = compilation.GetTypeByMetadataName("JsonSerializableAttribute");
-        var jsonIgnoreFieldAttributeSymbol = compilation.GetTypeByMetadataName("JsonIgnoreFieldAttribute");
-
-        if (jsonSerializableAttributeSymbol == null || jsonIgnoreFieldAttributeSymbol == null)
-            return;
-
-        // Process each candidate class
-        foreach (var classDeclaration in receiver.CandidateClasses)
+        foreach (var classDeclaration in classDeclarations)
         {
             var model = compilation.GetSemanticModel(classDeclaration.SyntaxTree);
-            var typeSymbol = model.GetDeclaredSymbol(classDeclaration) as INamedTypeSymbol;
+            var symbol = model.GetDeclaredSymbol(classDeclaration) as INamedTypeSymbol;
+            if (symbol == null) continue;
 
-            if (typeSymbol == null || !typeSymbol.GetAttributes().Any(ad => ad.AttributeClass.Equals(jsonSerializableAttributeSymbol, SymbolEqualityComparer.Default)))
-                continue;
+            var className = symbol.Name;
+            var namespaceName = symbol.ContainingNamespace.ToDisplayString();
 
-            // Generate the ToJson method
-            var source = GenerateToJsonMethod(typeSymbol, jsonIgnoreFieldAttributeSymbol);
-            context.AddSource($"{typeSymbol.Name}_ToJson.cs", SourceText.From(source, Encoding.UTF8));
+            var properties = symbol.GetMembers().OfType<IPropertySymbol>()
+                .Where(p => p.DeclaredAccessibility == Accessibility.Public &&
+                            !p.GetAttributes().Any(a => a.AttributeClass?.Name == "JsonIgnoreFieldAttribute"))
+                .Select(p => p.Name);
+
+            var fields = symbol.GetMembers().OfType<IFieldSymbol>()
+                .Where(f => f.DeclaredAccessibility == Accessibility.Public &&
+                            !f.GetAttributes().Any(a => a.AttributeClass?.Name == "JsonIgnoreFieldAttribute"))
+                .Select(f => f.Name);
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"namespace {namespaceName}");
+            sb.AppendLine("{");
+            sb.AppendLine($"    public partial class {className}");
+            sb.AppendLine("    {");
+            sb.AppendLine("        public string ToJson()");
+            sb.AppendLine("        {");
+            sb.AppendLine("            var json = new System.Text.StringBuilder();");
+            sb.AppendLine("            json.Append(\"{\");");
+
+            bool isFirst = true;
+            foreach (var property in properties)
+            {
+                if (!isFirst) sb.AppendLine("            json.Append(\",\");");
+                sb.AppendLine($"            json.Append($\"\\\"{property}\\\":\\\"{{this.{property}}}\\\"\");");
+                isFirst = false;
+            }
+
+            foreach (var field in fields)
+            {
+                if (!isFirst) sb.AppendLine("            json.Append(\",\");");
+                sb.AppendLine($"            json.Append($\"\\\"{field}\\\":\\\"{{this.{field}}}\\\"\");");
+                isFirst = false;
+            }
+
+            sb.AppendLine("            json.Append(\"}\");");
+            sb.AppendLine("            return json.ToString();");
+            sb.AppendLine("        }");
+            sb.AppendLine("    }");
+            sb.AppendLine("}");
+
+            context.AddSource($"{className}_Json.g.cs", SourceText.From(sb.ToString(), Encoding.UTF8));
         }
-    }
-
-    private string GenerateToJsonMethod(INamedTypeSymbol typeSymbol, ISymbol jsonIgnoreFieldAttributeSymbol)
-    {
-        var properties = typeSymbol.GetMembers()
-            .OfType<IPropertySymbol>()
-            .Where(p => p.DeclaredAccessibility == Accessibility.Public && !p.GetAttributes().Any(ad => ad.AttributeClass.Equals(jsonIgnoreFieldAttributeSymbol, SymbolEqualityComparer.Default)));
-
-        var fields = typeSymbol.GetMembers()
-            .OfType<IFieldSymbol>()
-            .Where(f => f.DeclaredAccessibility == Accessibility.Public && !f.GetAttributes().Any(ad => ad.AttributeClass.Equals(jsonIgnoreFieldAttributeSymbol, SymbolEqualityComparer.Default)));
-
-        var sb = new StringBuilder();
-        sb.AppendLine($"namespace {typeSymbol.ContainingNamespace.ToDisplayString()}");
-        sb.AppendLine("{");
-        sb.AppendLine($"    public partial class {typeSymbol.Name}");
-        sb.AppendLine("    {");
-        sb.AppendLine("        public string ToJson()");
-        sb.AppendLine("        {");
-        sb.AppendLine("            var json = new System.Text.StringBuilder();");
-        sb.AppendLine("            json.Append(\"{\");");
-
-        // Process properties
-        bool isFirst = true;
-        foreach (var property in properties)
-        {
-            if (!isFirst)
-                sb.AppendLine("            json.Append(\",\");");
-            sb.AppendLine($"            json.Append($\"\\\"{property.Name}\\\":\\\"{property.Name}\\\"\");");
-            isFirst = false;
-        }
-
-        // Process fields
-        foreach (var field in fields)
-        {
-            if (!isFirst)
-                sb.AppendLine("            json.Append(\",\");");
-            sb.AppendLine($"            json.Append($\"\\\"{field.Name}\\\":\\\"{field.Name}\\\"\");");
-            isFirst = false;
-        }
-
-        sb.AppendLine("            json.Append(\"}\");");
-        sb.AppendLine("            return json.ToString();");
-        sb.AppendLine("        }");
-        sb.AppendLine("    }");
-        sb.AppendLine("}");
-
-        return sb.ToString();
     }
 }

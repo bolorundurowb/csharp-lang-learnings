@@ -1,14 +1,9 @@
 using System;
 
-namespace json_source_generator
-{
-    [AttributeUsage(AttributeTargets.Class)]
-    public class JsonSerializableAttribute : Attribute
-    {
-    }
+namespace JsonSourceGenerator;
 
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    public class JsonIgnoreFieldAttribute : Attribute
-    {
-    }
-}
+[AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
+public class JsonSerializableAttribute : Attribute { }
+
+[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
+public class JsonIgnoreFieldAttribute : Attribute { }
