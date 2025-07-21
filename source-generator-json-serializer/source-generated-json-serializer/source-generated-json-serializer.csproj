@@ -7,8 +7,4 @@
         <OutputType>Exe</OutputType>
         <LangVersion>preview</LangVersion>
     </PropertyGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\json-source-generator\json-source-generator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer"/>
-    </ItemGroup>
 </Project>
