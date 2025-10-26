@@ -1,4 +1,4 @@
-﻿using JsonSerializerGenerators;
+﻿using JsonSerializerSourceGenerator;
 
 namespace SourceGeneratedJsonSerializer;
 

@@ -10,22 +10,24 @@ public class SourceGeneratedJsonSerializerGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
+        // Add the attributes
         context.RegisterPostInitializationOutput(ctx =>
         {
             ctx.AddSource("SourceJsonSerializableAttribute.g.cs", SourceGenerationHelpers.ObjectLevelAttribute);
             ctx.AddSource("SourceJsonIgnoreFieldAttribute.g.cs", SourceGenerationHelpers.FieldLevelAttribute);
-
-            var classesToUpdate = context.SyntaxProvider
-                .ForAttributeWithMetadataName(
-                    "JsonSerializerGenerators.SourceJsonSerializableAttribute",
-                    predicate: static (node, _) => node is ClassDeclarationSyntax,
-                    transform: static (syntaxCtx, _) => (INamedTypeSymbol)syntaxCtx.TargetSymbol
-                )
-                .Combine(context.CompilationProvider);
-
-            context.RegisterSourceOutput(classesToUpdate,
-                static (spc, source) => Execute(source.Right, source.Left, spc));
         });
+
+        // Register the source generation
+        var classesToUpdate = context.SyntaxProvider
+            .ForAttributeWithMetadataName(
+                "JsonSerializerSourceGenerator.SourceJsonSerializableAttribute",
+                predicate: static (node, _) => node is ClassDeclarationSyntax,
+                transform: static (syntaxCtx, _) => (INamedTypeSymbol)syntaxCtx.TargetSymbol
+            )
+            .Combine(context.CompilationProvider);
+
+        context.RegisterSourceOutput(classesToUpdate,
+            static (spc, source) => Execute(source.Right, source.Left, spc));
     }
 
     private static void Execute(Compilation compilation, INamedTypeSymbol sourceSymbol, SourceProductionContext spc)

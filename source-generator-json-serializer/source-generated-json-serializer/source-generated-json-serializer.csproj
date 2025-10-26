@@ -1,11 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <RootNamespace>SourceGeneratedJsonSerializer</RootNamespace>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <OutputType>Exe</OutputType>
-        <LangVersion>preview</LangVersion>
     </PropertyGroup>
     <ItemGroup>
       <ProjectReference Include="..\json-serializer-source-generator\json-serializer-source-generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />

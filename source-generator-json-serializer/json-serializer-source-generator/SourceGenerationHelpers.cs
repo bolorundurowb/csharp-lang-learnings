@@ -6,13 +6,13 @@ namespace JsonSerializerSourceGenerator;
 public static class SourceGenerationHelpers
 {
     public const string ObjectLevelAttribute = """
-                                               namespace JsonSerializerGenerators;
+                                               namespace JsonSerializerSourceGenerator;
                                                [AttributeUsage(AttributeTargets.Class, Inherited = false, AllowMultiple = false)]
                                                public class SourceJsonSerializableAttribute : Attribute { }
                                                """;
 
     public const string FieldLevelAttribute = """
-                                              namespace JsonSerializerGenerators;
+                                              namespace JsonSerializerSourceGenerator;
                                               [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, Inherited = false, AllowMultiple = false)]
                                               public class SourceJsonIgnoreFieldAttribute : Attribute { }
                                               """;
@@ -21,6 +21,14 @@ public static class SourceGenerationHelpers
     {
         var className = classSymbol.Name;
         var classNamespace = classSymbol.ContainingNamespace.ToDisplayString();
+        
+        // Find the 'Ignore' attribute symbol in the compilation
+        var ignoreAttribute = compilation.GetTypeByMetadataName("JsonSerializerSourceGenerator.SourceJsonIgnoreFieldAttribute");
+        if (ignoreAttribute is null)
+        {
+            // Attribute not found, something is wrong
+            return string.Empty;
+        }
 
         var eligibleMembers = classSymbol.GetMembers()
             .Where(m => !m.IsStatic && m.DeclaredAccessibility == Accessibility.Public)
