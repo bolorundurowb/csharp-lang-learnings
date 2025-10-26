@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace JsonSerializerGenerators;
+namespace JsonSerializerSourceGenerator;
 
 [Generator]
 public class SourceGeneratedJsonSerializerGenerator : IIncrementalGenerator

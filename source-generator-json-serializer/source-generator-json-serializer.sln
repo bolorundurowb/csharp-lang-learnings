@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "source-generated-json-serializer", "source-generated-json-serializer\source-generated-json-serializer.csproj", "{C153EE1B-EE21-4962-ADA6-886C84BF6DF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "json-serializer-generators", "json-serializer-generators\json-serializer-generators.csproj", "{1B342D5D-A99F-4AC2-AD98-61282B02225D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "json-serializer-source-generator", "json-serializer-source-generator\json-serializer-source-generator.csproj", "{1B342D5D-A99F-4AC2-AD98-61282B02225D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

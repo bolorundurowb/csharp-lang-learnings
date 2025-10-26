@@ -1,5 +1,4 @@
-﻿
-using JsonSerializerGenerators;
+﻿using JsonSerializerGenerators;
 
 namespace SourceGeneratedJsonSerializer;
 
@@ -7,11 +6,11 @@ namespace SourceGeneratedJsonSerializer;
 public partial class MyStuff
 {
     public string Name { get; set; } = "John Doe";
-    
-    [SourceJsonIgnoreField]
+
+    [SourceJsonIgnoreField] 
     public string Secret { get; set; } = "Don't show this";
 
     public int Age = 13;
-    
+
     public bool IsCool { get; set; } = true;
 }

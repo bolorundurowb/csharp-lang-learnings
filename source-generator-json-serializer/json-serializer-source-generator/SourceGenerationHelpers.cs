@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using Microsoft.CodeAnalysis;
 
-namespace JsonSerializerGenerators;
+namespace JsonSerializerSourceGenerator;
 
 public static class SourceGenerationHelpers
 {
