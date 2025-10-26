@@ -18,8 +18,8 @@ public class SourceGeneratedJsonSerializerGenerator : IIncrementalGenerator
             var classesToUpdate = context.SyntaxProvider
                 .ForAttributeWithMetadataName(
                     "JsonSerializerGenerators.SourceJsonSerializableAttribute",
-                    predicate: static (s, _) => true,
-                    transform: static (s, _) => (ClassDeclarationSyntax)s.TargetNode
+                    predicate: static (node, _) => node is ClassDeclarationSyntax,
+                    transform: static (syntaxCtx, _) => (INamedTypeSymbol)syntaxCtx.TargetSymbol
                 )
                 .Combine(context.CompilationProvider);
             
@@ -27,9 +27,9 @@ public class SourceGeneratedJsonSerializerGenerator : IIncrementalGenerator
         });
     }
 
-    private static void Execute(Compilation compilation, ClassDeclarationSyntax source, SourceProductionContext spc)
+    private static void Execute(Compilation compilation, INamedTypeSymbol sourceSymbol, SourceProductionContext spc)
     {
-        var partialClass = SourceGenerationHelpers.GeneratePartialClass(source);
-        spc.AddSource($"{source.Identifier.Text}.g.cs", SourceText.From(partialClass, Encoding.UTF8));
+        var partialClass = SourceGenerationHelpers.GeneratePartialClass(sourceSymbol, compilation);
+        spc.AddSource($"{sourceSymbol.Name}.g.cs", SourceText.From(partialClass, Encoding.UTF8));
     }
 }
