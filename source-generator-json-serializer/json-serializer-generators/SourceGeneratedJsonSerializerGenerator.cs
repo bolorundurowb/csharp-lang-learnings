@@ -22,14 +22,19 @@ public class SourceGeneratedJsonSerializerGenerator : IIncrementalGenerator
                     transform: static (syntaxCtx, _) => (INamedTypeSymbol)syntaxCtx.TargetSymbol
                 )
                 .Combine(context.CompilationProvider);
-            
-            context.RegisterSourceOutput(classesToUpdate, static (spc, source) => Execute(source.Right, source.Left, spc));
+
+            context.RegisterSourceOutput(classesToUpdate,
+                static (spc, source) => Execute(source.Right, source.Left, spc));
         });
     }
 
     private static void Execute(Compilation compilation, INamedTypeSymbol sourceSymbol, SourceProductionContext spc)
     {
         var partialClass = SourceGenerationHelpers.GeneratePartialClass(sourceSymbol, compilation);
+
+        if (string.IsNullOrEmpty(partialClass))
+            return;
+
         spc.AddSource($"{sourceSymbol.Name}.g.cs", SourceText.From(partialClass, Encoding.UTF8));
     }
 }
