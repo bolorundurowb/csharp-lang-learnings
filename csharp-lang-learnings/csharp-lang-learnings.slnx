@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="..\simple-json-deserializer\simple-json-deserializer.csproj" />
+  <Project Path="..\simple-json-serializer\simple-json-serializer.csproj" />
+  <Project Path="..\simple-markdown-to-html-converter\simple-markdown-to-html-converter.csproj" />
+  <Project Path="..\source-generator-json-serializer\json-serializer-source-generator\json-serializer-source-generator.csproj" />
+  <Project Path="..\source-generator-json-serializer\source-generated-json-serializer\source-generated-json-serializer.csproj" />
+  <Project Path="..\toy-language-compiler\toy-language-compiler\toy-language-compiler.csproj" />
+</Solution>
