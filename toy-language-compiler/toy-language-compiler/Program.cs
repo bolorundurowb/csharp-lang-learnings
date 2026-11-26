@@ -7,7 +7,7 @@ var fileContents = File.ReadAllText(filePath);
 var tokens = Lex(fileContents);
 
 Console.WriteLine("Hello, World!");
-return;
+// return;
 
 List<Token> Lex(string input)
 {

@@ -69,7 +69,7 @@ public class JsonSerializer
 
         return objectStringBuilder.ToString();
 
-        void AppendMemberDetails<T>(MemberInfo memberInfo, JsonSerializerSettings serializerSettings, T objectInstance,
+        void AppendMemberDetails(MemberInfo memberInfo, JsonSerializerSettings serializerSettings, T objectInstance,
             StringBuilder stringBuilder)
         {
             var memberValue = GetMemberValue(memberInfo, objectInstance);
