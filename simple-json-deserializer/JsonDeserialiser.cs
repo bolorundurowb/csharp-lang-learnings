@@ -15,7 +15,7 @@ public class JsonDeserialiser
         {
             return default;
         }
-        
+
         throw new NotImplementedException();
     }
 }

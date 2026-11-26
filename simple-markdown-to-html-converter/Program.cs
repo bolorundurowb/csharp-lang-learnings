@@ -70,10 +70,10 @@ class Program
             sb.Append($"<h{headerLevel}>");
         }
 
-        for(var i = 0; i < line.Length; i++)
+        for (var i = 0; i < line.Length; i++)
         {
             var character = line[i];
-            
+
             if (character == '*')
             {
                 // Handle bold or italic

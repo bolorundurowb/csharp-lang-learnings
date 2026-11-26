@@ -21,7 +21,7 @@ public static class SourceGenerationHelpers
     {
         var className = classSymbol.Name;
         var classNamespace = classSymbol.ContainingNamespace.ToDisplayString();
-        
+
         // Find the 'Ignore' attribute symbol in the compilation
         var ignoreAttribute = compilation.GetTypeByMetadataName("JsonSerializerSourceGenerator.SourceJsonIgnoreFieldAttribute");
         if (ignoreAttribute is null)
